@@ -18,6 +18,7 @@ with open(chemin_prompt, "r", encoding="utf-8") as f:
 # C’est le texte du prompt système qu’on va utiliser pour guider l’IA
 system_prompt = system_prompt_data.get("content", "")
 
+
 def envoyer_message(message):
     """
     Envoie un message utilisateur au serveur LM Studio via l'API REST et retourne la réponse de l'IA.
@@ -36,17 +37,20 @@ def envoyer_message(message):
     payload = {
         "model": "mistral-7b-instruct-v0.3",  # Modèle utilisé
         "messages": [
-            {"role": "user", "content": prompt_complet}  # Message utilisateur avec prompt intégré
+            {
+                "role": "user",
+                "content": prompt_complet,
+            }  # Message utilisateur avec prompt intégré
         ],
         "temperature": 0.7,  # Paramètre qui contrôle la créativité des réponses
-        "max_tokens": 300    # Limite du nombre de tokens générés par la réponse
+        "max_tokens": 300,  # Limite du nombre de tokens générés par la réponse
     }
-    
+
     try:
         # Envoi de la requête POST à l’API LM Studio
         response = requests.post(LM_STUDIO_URL, json=payload)
         response.raise_for_status()  # Vérifie que la requête s’est bien passée (code 200)
-        data = response.json()       # Parse la réponse JSON en dict Python
+        data = response.json()  # Parse la réponse JSON en dict Python
 
         # Vérifie si la réponse contient bien des choix (réponses générées)
         if "choices" in data and len(data["choices"]) > 0:
@@ -61,6 +65,7 @@ def envoyer_message(message):
         # Gestion des autres erreurs possibles (ex : erreurs de parsing JSON)
         return f"[Erreur inattendue] {e}"
 
+
 # Cette condition vérifie que le script est exécuté directement (pas importé en module)
 if __name__ == "__main__":
     print("Chatbot prêt. Tape 'quit' pour sortir.")
@@ -69,5 +74,7 @@ if __name__ == "__main__":
         user_input = input("Vous : ")  # Lecture de l'entrée utilisateur
         if user_input.lower() == "quit":  # Condition pour quitter la boucle
             break
-        reponse = envoyer_message(user_input)  # Envoi du message et réception de la réponse IA
+        reponse = envoyer_message(
+            user_input
+        )  # Envoi du message et réception de la réponse IA
         print("Bot :", reponse)  # Affichage de la réponse

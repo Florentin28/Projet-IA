@@ -1,0 +1,9 @@
+{
+  "apiVersion": "1.0",
+  "name": "python-connector",
+  "id": "com.flo.pythonconnector",
+  "author": "flo",
+  "description": "Plugin minimal pour connexion API",
+  "version": "0.0.1",
+  "main": "main.js"
+}
